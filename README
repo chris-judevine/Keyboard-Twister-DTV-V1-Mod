@@ -1,0 +1,11 @@
+Keyboard Twister
+================
+http://picobay.com/dtv_wiki/index.php?title=Keyboard_Twister
+
+Keyboard twister is an ATtiny45-based hardware solution to fix some issues in the DTV's keyboard emulation as well 
+as mapping german keyboard layout.
+
+Intel hex file see default/ directory.
+
+Programming an ATtiny45 with AVRDUDE on Linux with an STK200 programmer:
+avrdude -p t45 -c stk200 -P /dev/parport0 -U flash:w:keyboardtwister.hex:i -U lfuse:w:0xE2:m

@@ -1,0 +1,449 @@
+Archive member included because of file (symbol)
+
+c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_exit.o)
+                              c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr25/crttn45.o (exit)
+c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_copy_data.o)
+                              scancon.o (__do_copy_data)
+c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_clear_bss.o)
+                              ps2host.o (__do_clear_bss)
+
+Allocating common symbols
+Common symbol       size              file
+
+Transmit            0x1               ps2host.o
+recBit              0x1               ps2host.o
+ATh                 0x1               ps2host.o
+ATFrame             0x2               ps2host.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00002000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000400         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr25/crttn45.o
+LOAD scancon.o
+LOAD ps2device.o
+LOAD ps2host.o
+LOAD utility.o
+LOAD handler2.o
+LOAD c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a
+LOAD c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr25\libc.a
+LOAD c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000      0x7c4
+ *(.vectors)
+ .vectors       0x00000000       0x1e c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr25/crttn45.o
+                0x00000000                __vectors
+                0x00000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+ *(.progmem*)
+                0x0000001e                . = ALIGN (0x2)
+                0x0000001e                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x0000001e        0x0 linker stubs
+ *(.trampolines*)
+                0x0000001e                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x0000001e                __ctors_start = .
+ *(.ctors)
+                0x0000001e                __ctors_end = .
+                0x0000001e                __dtors_start = .
+ *(.dtors)
+                0x0000001e                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x0000001e        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr25/crttn45.o
+                0x0000001e                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x0000001e        0xc c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr25/crttn45.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x0000002a       0x16 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_copy_data.o)
+                0x0000002a                __do_copy_data
+ .init4         0x00000040       0x10 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_clear_bss.o)
+                0x00000040                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x00000050        0x4 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr25/crttn45.o
+ *(.init9)
+ *(.text)
+ .text          0x00000054        0x2 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr25/crttn45.o
+                0x00000054                __vector_12
+                0x00000054                __bad_interrupt
+                0x00000054                __vector_6
+                0x00000054                __vector_3
+                0x00000054                __vector_11
+                0x00000054                __vector_13
+                0x00000054                __vector_7
+                0x00000054                __vector_5
+                0x00000054                __vector_9
+                0x00000054                __vector_2
+                0x00000054                __vector_8
+                0x00000054                __vector_14
+                0x00000054                __vector_10
+ .text          0x00000056      0x216 scancon.o
+                0x00000056                sendBytes
+                0x00000074                main
+ .text          0x0000026c      0x1c4 ps2device.o
+                0x00000276                getBusState
+                0x000002d0                getScanCode
+                0x0000026c                device_init
+                0x0000028c                getBit
+                0x0000037c                sendScanCode
+                0x000003e2                receiveScanCode
+                0x0000034c                sendBit
+ .text          0x00000430      0x254 ps2host.o
+                0x0000049a                __vector_1
+                0x0000046a                AThit
+                0x00000630                getATCode
+                0x00000470                inhibitBus
+                0x00000430                host_init
+                0x000005d0                sendATCommand
+                0x0000044c                __vector_4
+ .text          0x00000684       0xe8 utility.o
+                0x000006be                output_float
+                0x000006dc                output_pulled_up
+                0x00000684                output_high
+                0x000006a0                output_low
+                0x000006fc                input
+                0x00000728                calcParity
+                0x0000075e                delay_us
+                0x00000742                delay_ms
+ .text          0x0000076c       0x54 handler2.o
+                0x0000076c                processPCtoKeyboard
+ .text          0x000007c0        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_exit.o)
+ .text          0x000007c0        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_copy_data.o)
+ .text          0x000007c0        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_clear_bss.o)
+                0x000007c0                . = ALIGN (0x2)
+ *(.text.*)
+ .text.libgcc   0x000007c0        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_exit.o)
+ .text.libgcc   0x000007c0        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_copy_data.o)
+ .text.libgcc   0x000007c0        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_clear_bss.o)
+                0x000007c0                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x000007c0        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_exit.o)
+                0x000007c0                exit
+                0x000007c0                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x000007c0        0x4 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_exit.o)
+ *(.fini0)
+                0x000007c4                _etext = .
+
+.data           0x00800060        0xc load address 0x000007c4
+                0x00800060                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x00800060        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr25/crttn45.o
+ .data          0x00800060        0xa scancon.o
+ .data          0x0080006a        0x1 ps2device.o
+                0x0080006a                lastSent
+ .data          0x0080006b        0x0 ps2host.o
+ .data          0x0080006b        0x0 utility.o
+ .data          0x0080006b        0x1 handler2.o
+ .data          0x0080006c        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_exit.o)
+ .data          0x0080006c        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_copy_data.o)
+ .data          0x0080006c        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_clear_bss.o)
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x0080006c                . = ALIGN (0x2)
+                0x0080006c                _edata = .
+                0x0080006c                PROVIDE (__data_end, .)
+
+.bss            0x0080006c        0x6
+                0x0080006c                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x0080006c        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/../../../../avr/lib/avr25/crttn45.o
+ .bss           0x0080006c        0x0 scancon.o
+ .bss           0x0080006c        0x0 ps2device.o
+ .bss           0x0080006c        0x0 ps2host.o
+ .bss           0x0080006c        0x0 utility.o
+ .bss           0x0080006c        0x1 handler2.o
+ .bss           0x0080006d        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_exit.o)
+ .bss           0x0080006d        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_copy_data.o)
+ .bss           0x0080006d        0x0 c:/winavr-20090313/bin/../lib/gcc/avr/4.3.2/avr25\libgcc.a(_clear_bss.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x0080006d        0x5 ps2host.o
+                0x0080006d                Transmit
+                0x0080006e                recBit
+                0x0080006f                ATh
+                0x00800070                ATFrame
+                0x00800072                PROVIDE (__bss_end, .)
+                0x000007c4                __data_load_start = LOADADDR (.data)
+                0x000007d0                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x00800072        0x0
+                0x00800072                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x00800072                PROVIDE (__noinit_end, .)
+                0x00800072                _end = .
+                0x00800072                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000       0xa0
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 scancon.o
+ .debug_aranges
+                0x00000020       0x20 ps2device.o
+ .debug_aranges
+                0x00000040       0x20 ps2host.o
+ .debug_aranges
+                0x00000060       0x20 utility.o
+ .debug_aranges
+                0x00000080       0x20 handler2.o
+
+.debug_pubnames
+                0x00000000      0x20b
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x00000000       0x29 scancon.o
+ .debug_pubnames
+                0x00000029       0x8b ps2device.o
+ .debug_pubnames
+                0x000000b4       0xa3 ps2host.o
+ .debug_pubnames
+                0x00000157       0x8a utility.o
+ .debug_pubnames
+                0x000001e1       0x2a handler2.o
+
+.debug_info     0x00000000      0x843
+ *(.debug_info)
+ .debug_info    0x00000000      0x118 scancon.o
+ .debug_info    0x00000118      0x23c ps2device.o
+ .debug_info    0x00000354      0x1f3 ps2host.o
+ .debug_info    0x00000547      0x215 utility.o
+ .debug_info    0x0000075c       0xe7 handler2.o
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev   0x00000000      0x4a4
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0xc9 scancon.o
+ .debug_abbrev  0x000000c9      0x12a ps2device.o
+ .debug_abbrev  0x000001f3      0x119 ps2host.o
+ .debug_abbrev  0x0000030c       0xef utility.o
+ .debug_abbrev  0x000003fb       0xa9 handler2.o
+
+.debug_line     0x00000000      0xb84
+ *(.debug_line)
+ .debug_line    0x00000000      0x32f scancon.o
+ .debug_line    0x0000032f      0x2c9 ps2device.o
+ .debug_line    0x000005f8      0x2cc ps2host.o
+ .debug_line    0x000008c4      0x1c1 utility.o
+ .debug_line    0x00000a85       0xff handler2.o
+
+.debug_frame    0x00000000      0x1e0
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x30 scancon.o
+ .debug_frame   0x00000030       0x80 ps2device.o
+ .debug_frame   0x000000b0       0x80 ps2host.o
+ .debug_frame   0x00000130       0x90 utility.o
+ .debug_frame   0x000001c0       0x20 handler2.o
+
+.debug_str      0x00000000      0x2b5
+ *(.debug_str)
+ .debug_str     0x00000000       0xc8 scancon.o
+                                0x101 (size before relaxing)
+ .debug_str     0x000000c8       0xb0 ps2device.o
+                                0x16c (size before relaxing)
+ .debug_str     0x00000178       0x9d ps2host.o
+                                0x165 (size before relaxing)
+ .debug_str     0x00000215       0x67 utility.o
+                                0x12c (size before relaxing)
+ .debug_str     0x0000027c       0x39 handler2.o
+                                0x11a (size before relaxing)
+
+.debug_loc      0x00000000      0x425
+ *(.debug_loc)
+ .debug_loc     0x00000000      0x167 scancon.o
+ .debug_loc     0x00000167      0x140 ps2device.o
+ .debug_loc     0x000002a7       0xc0 ps2host.o
+ .debug_loc     0x00000367       0xa0 utility.o
+ .debug_loc     0x00000407       0x1e handler2.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(keyboardtwister.elf elf32-avr)
+LOAD linker stubs

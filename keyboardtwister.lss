@@ -1,0 +1,1736 @@
+
+keyboardtwister.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000007c4  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000000c  00800060  000007c4  00000858  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000006  0080006c  0080006c  00000864  2**0
+                  ALLOC
+  3 .debug_aranges 000000a0  00000000  00000000  00000864  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_pubnames 0000020b  00000000  00000000  00000904  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000843  00000000  00000000  00000b0f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000004a4  00000000  00000000  00001352  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000b84  00000000  00000000  000017f6  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000001e0  00000000  00000000  0000237c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000002b5  00000000  00000000  0000255c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000425  00000000  00000000  00002811  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0e c0       	rjmp	.+28     	; 0x1e <__ctors_end>
+   2:	4b c2       	rjmp	.+1174   	; 0x49a <__vector_1>
+   4:	27 c0       	rjmp	.+78     	; 0x54 <__bad_interrupt>
+   6:	26 c0       	rjmp	.+76     	; 0x54 <__bad_interrupt>
+   8:	21 c2       	rjmp	.+1090   	; 0x44c <__vector_4>
+   a:	24 c0       	rjmp	.+72     	; 0x54 <__bad_interrupt>
+   c:	23 c0       	rjmp	.+70     	; 0x54 <__bad_interrupt>
+   e:	22 c0       	rjmp	.+68     	; 0x54 <__bad_interrupt>
+  10:	21 c0       	rjmp	.+66     	; 0x54 <__bad_interrupt>
+  12:	20 c0       	rjmp	.+64     	; 0x54 <__bad_interrupt>
+  14:	1f c0       	rjmp	.+62     	; 0x54 <__bad_interrupt>
+  16:	1e c0       	rjmp	.+60     	; 0x54 <__bad_interrupt>
+  18:	1d c0       	rjmp	.+58     	; 0x54 <__bad_interrupt>
+  1a:	1c c0       	rjmp	.+56     	; 0x54 <__bad_interrupt>
+  1c:	1b c0       	rjmp	.+54     	; 0x54 <__bad_interrupt>
+
+0000001e <__ctors_end>:
+  1e:	11 24       	eor	r1, r1
+  20:	1f be       	out	0x3f, r1	; 63
+  22:	cf e5       	ldi	r28, 0x5F	; 95
+  24:	d1 e0       	ldi	r29, 0x01	; 1
+  26:	de bf       	out	0x3e, r29	; 62
+  28:	cd bf       	out	0x3d, r28	; 61
+
+0000002a <__do_copy_data>:
+  2a:	10 e0       	ldi	r17, 0x00	; 0
+  2c:	a0 e6       	ldi	r26, 0x60	; 96
+  2e:	b0 e0       	ldi	r27, 0x00	; 0
+  30:	e4 ec       	ldi	r30, 0xC4	; 196
+  32:	f7 e0       	ldi	r31, 0x07	; 7
+  34:	02 c0       	rjmp	.+4      	; 0x3a <.do_copy_data_start>
+
+00000036 <.do_copy_data_loop>:
+  36:	05 90       	lpm	r0, Z+
+  38:	0d 92       	st	X+, r0
+
+0000003a <.do_copy_data_start>:
+  3a:	ac 36       	cpi	r26, 0x6C	; 108
+  3c:	b1 07       	cpc	r27, r17
+  3e:	d9 f7       	brne	.-10     	; 0x36 <.do_copy_data_loop>
+
+00000040 <__do_clear_bss>:
+  40:	10 e0       	ldi	r17, 0x00	; 0
+  42:	ac e6       	ldi	r26, 0x6C	; 108
+  44:	b0 e0       	ldi	r27, 0x00	; 0
+  46:	01 c0       	rjmp	.+2      	; 0x4a <.do_clear_bss_start>
+
+00000048 <.do_clear_bss_loop>:
+  48:	1d 92       	st	X+, r1
+
+0000004a <.do_clear_bss_start>:
+  4a:	a2 37       	cpi	r26, 0x72	; 114
+  4c:	b1 07       	cpc	r27, r17
+  4e:	e1 f7       	brne	.-8      	; 0x48 <.do_clear_bss_loop>
+  50:	11 d0       	rcall	.+34     	; 0x74 <main>
+  52:	b6 c3       	rjmp	.+1900   	; 0x7c0 <_exit>
+
+00000054 <__bad_interrupt>:
+  54:	d5 cf       	rjmp	.-86     	; 0x0 <__vectors>
+
+00000056 <sendBytes>:
+#include "avr\io.h"
+
+
+#define JOY_UP 0 // define joy up as pb0
+
+void sendBytes(char *b){
+  56:	cf 93       	push	r28
+  58:	df 93       	push	r29
+  5a:	ec 01       	movw	r28, r24
+  5c:	05 c0       	rjmp	.+10     	; 0x68 <sendBytes+0x12>
+ while(b[0]!=0)
+ {
+  sendScanCode(b[0]);
+  5e:	8e d1       	rcall	.+796    	; 0x37c <sendScanCode>
+  delay_ms(15);
+  60:	8f e0       	ldi	r24, 0x0F	; 15
+  62:	90 e0       	ldi	r25, 0x00	; 0
+  64:	6e d3       	rcall	.+1756   	; 0x742 <delay_ms>
+  b++;
+  66:	21 96       	adiw	r28, 0x01	; 1
+
+
+#define JOY_UP 0 // define joy up as pb0
+
+void sendBytes(char *b){
+ while(b[0]!=0)
+  68:	88 81       	ld	r24, Y
+  6a:	88 23       	and	r24, r24
+  6c:	c1 f7       	brne	.-16     	; 0x5e <sendBytes+0x8>
+ {
+  sendScanCode(b[0]);
+  delay_ms(15);
+  b++;
+ }
+}
+  6e:	df 91       	pop	r29
+  70:	cf 91       	pop	r28
+  72:	08 95       	ret
+
+00000074 <main>:
+
+
+// this is the main application that runs continuously and provides high level functionality 
+int main(void)
+{
+  74:	4f 92       	push	r4
+  76:	5f 92       	push	r5
+  78:	6f 92       	push	r6
+  7a:	7f 92       	push	r7
+  7c:	8f 92       	push	r8
+  7e:	9f 92       	push	r9
+  80:	af 92       	push	r10
+  82:	bf 92       	push	r11
+  84:	cf 92       	push	r12
+  86:	df 92       	push	r13
+  88:	ef 92       	push	r14
+  8a:	ff 92       	push	r15
+  8c:	0f 93       	push	r16
+  8e:	1f 93       	push	r17
+  90:	df 93       	push	r29
+  92:	cf 93       	push	r28
+  94:	00 d0       	rcall	.+0      	; 0x96 <main+0x22>
+  96:	0f 92       	push	r0
+  98:	cd b7       	in	r28, 0x3d	; 61
+  9a:	de b7       	in	r29, 0x3e	; 62
+uint8_t altgr=0;      // indicator if ALTGR was pressed
+uint8_t suppress=0; // indicator if sending scan-code out is to be avoided
+uint8_t keyCode;
+
+
+volatile bool JOY_PRESS=false; //tracks if joy up is pressed 
+  9c:	1a 82       	std	Y+2, r1	; 0x02
+output_pulled_up(JOY_UP); // set Joy up as input and turn on pull up
+  9e:	80 e0       	ldi	r24, 0x00	; 0
+  a0:	1d d3       	rcall	.+1594   	; 0x6dc <output_pulled_up>
+PORTB&= ~_BV(PB5);//PORTB pin5 low
+  a2:	c5 98       	cbi	0x18, 5	; 24
+DDRB|=_BV(PB5);//set PORTB pin5 to one as output
+  a4:	bd 9a       	sbi	0x17, 5	; 23
+
+device_init(); // initialize keyboard emulation hardware
+  a6:	e2 d0       	rcall	.+452    	; 0x26c <device_init>
+host_init();   // initialize pc host hardware
+  a8:	c3 d1       	rcall	.+902    	; 0x430 <host_init>
+sei();         // enable interrupts
+  aa:	78 94       	sei
+delay_ms(900); // give dtv some time to boot
+  ac:	84 e8       	ldi	r24, 0x84	; 132
+  ae:	93 e0       	ldi	r25, 0x03	; 3
+  b0:	48 d3       	rcall	.+1680   	; 0x742 <delay_ms>
+
+while(1) // just wait untill the keyboard responds
+{
+ delay_ms(3); // look for a keyboard POST response every 3 ms
+  b2:	83 e0       	ldi	r24, 0x03	; 3
+  b4:	90 e0       	ldi	r25, 0x00	; 0
+  b6:	45 d3       	rcall	.+1674   	; 0x742 <delay_ms>
+ if(AThit()) break; // keyboard is connected, continue
+  b8:	d8 d1       	rcall	.+944    	; 0x46a <AThit>
+  ba:	88 23       	and	r24, r24
+  bc:	d1 f3       	breq	.-12     	; 0xb2 <main+0x3e>
+  be:	00 e0       	ldi	r16, 0x00	; 0
+  c0:	10 e0       	ldi	r17, 0x00	; 0
+  c2:	1b 82       	std	Y+3, r1	; 0x03
+
+ if ((!(input(JOY_UP)))&& (!(JOY_PRESS)))// Read joy up pin if  pressed 
+  {
+   sendScanCode(0x66); // delete
+   PORTB|=_BV(PB5);//PORTB pin5 high
+   JOY_PRESS=true;
+  c4:	66 24       	eor	r6, r6
+  c6:	63 94       	inc	r6
+   JOY_PRESS=false;
+  }
+ if (AThit())
+ {
+  inhibitBus(true); // prevent keyboard transmit while decoding current command 
+  if(getATCode(&keyCode)) // keyboard sent a code?
+  c8:	7e 01       	movw	r14, r28
+  ca:	08 94       	sec
+  cc:	e1 1c       	adc	r14, r1
+  ce:	f1 1c       	adc	r15, r1
+              }
+              brk = 0;
+              break;
+
+    case 0x59: // rshift
+              keyCode = 0x12; // make this the correct r-shift for C64
+  d0:	e2 e1       	ldi	r30, 0x12	; 18
+  d2:	5e 2e       	mov	r5, r30
+              brk = 0;
+              break;
+
+    case 0x83: // scan-code for F7
+              sendScanCode(0xe0); // make this 0xe0 0x03 to fix
+              keyCode = 0x03;     // a bug in the DTV
+  d4:	73 e0       	ldi	r23, 0x03	; 3
+  d6:	47 2e       	mov	r4, r23
+              break;
+
+    case 0x36: // key for '6' - SHIFT-6 is & on german keyboards
+              if(shift == 1)
+              {
+               keyCode = 0x3d; // output '&' on SHIFT-6
+  d8:	6d e3       	ldi	r22, 0x3D	; 61
+  da:	96 2e       	mov	r9, r22
+              {
+               keyCode = 0x46; // output '(' on SHIFT-8
+              }
+              if(altgr == 1)
+              {
+               keyCode = 0x54; // output '[' on ALTGR-8
+  dc:	54 e5       	ldi	r21, 0x54	; 84
+  de:	85 2e       	mov	r8, r21
+
+
+    case 0x3e: // key for '8'
+              if(shift == 1)
+              {
+               keyCode = 0x46; // output '(' on SHIFT-8
+  e0:	46 e4       	ldi	r20, 0x46	; 70
+  e2:	74 2e       	mov	r7, r20
+              {
+               keyCode = 0x45; // output ')' on SHIFT-9
+              }
+              if(altgr == 1)
+              {
+               keyCode = 0x5b; // output ']' on ALTGR-9
+  e4:	3b e5       	ldi	r19, 0x5B	; 91
+  e6:	d3 2e       	mov	r13, r19
+              break;
+
+    case 0x46: // key for '9'
+              if(shift == 1)
+              {
+               keyCode = 0x45; // output ')' on SHIFT-9
+  e8:	25 e4       	ldi	r18, 0x45	; 69
+  ea:	c2 2e       	mov	r12, r18
+    case 0xf0: // break-code
+              brk = 1;
+              break;
+
+    case 0x12: // lshift
+              keyCode = 0x59; // make this the correct l-shift for C64
+  ec:	99 e5       	ldi	r25, 0x59	; 89
+  ee:	b9 2e       	mov	r11, r25
+              break;
+
+    case 0x1e: // key for '2' - SHIFT-2 is " on german keyboards
+              if(shift == 1)
+              {
+               keyCode = 0x52; // output '"' on SHIFT-2
+  f0:	82 e5       	ldi	r24, 0x52	; 82
+  f2:	a8 2e       	mov	r10, r24
+}
+
+// endless loop
+while(1)
+{
+ processPCtoKeyboard(); // check pc to keyboard (or handle if no attached keyboard) coms
+  f4:	3b d3       	rcall	.+1654   	; 0x76c <processPCtoKeyboard>
+
+ if ((!(input(JOY_UP)))&& (!(JOY_PRESS)))// Read joy up pin if  pressed 
+  f6:	80 e0       	ldi	r24, 0x00	; 0
+  f8:	01 d3       	rcall	.+1538   	; 0x6fc <input>
+  fa:	88 23       	and	r24, r24
+  fc:	39 f4       	brne	.+14     	; 0x10c <main+0x98>
+  fe:	8a 81       	ldd	r24, Y+2	; 0x02
+ 100:	88 23       	and	r24, r24
+ 102:	21 f4       	brne	.+8      	; 0x10c <main+0x98>
+  {
+   sendScanCode(0x66); // delete
+ 104:	86 e6       	ldi	r24, 0x66	; 102
+ 106:	3a d1       	rcall	.+628    	; 0x37c <sendScanCode>
+   PORTB|=_BV(PB5);//PORTB pin5 high
+ 108:	c5 9a       	sbi	0x18, 5	; 24
+   JOY_PRESS=true;
+ 10a:	6a 82       	std	Y+2, r6	; 0x02
+  }
+ if ((input(JOY_UP)) && (JOY_PRESS))// Read joy up pin if released
+ 10c:	80 e0       	ldi	r24, 0x00	; 0
+ 10e:	f6 d2       	rcall	.+1516   	; 0x6fc <input>
+ 110:	88 23       	and	r24, r24
+ 112:	49 f0       	breq	.+18     	; 0x126 <main+0xb2>
+ 114:	8a 81       	ldd	r24, Y+2	; 0x02
+ 116:	88 23       	and	r24, r24
+ 118:	31 f0       	breq	.+12     	; 0x126 <main+0xb2>
+  {
+   sendScanCode(0xF0); // release code byte 1
+ 11a:	80 ef       	ldi	r24, 0xF0	; 240
+ 11c:	2f d1       	rcall	.+606    	; 0x37c <sendScanCode>
+   sendScanCode(0x66); // release code
+ 11e:	86 e6       	ldi	r24, 0x66	; 102
+ 120:	2d d1       	rcall	.+602    	; 0x37c <sendScanCode>
+   PORTB&=~_BV(PB5);//PORTB pin5 low
+ 122:	c5 98       	cbi	0x18, 5	; 24
+   JOY_PRESS=false;
+ 124:	1a 82       	std	Y+2, r1	; 0x02
+  }
+ if (AThit())
+ 126:	a1 d1       	rcall	.+834    	; 0x46a <AThit>
+ 128:	88 23       	and	r24, r24
+ 12a:	21 f3       	breq	.-56     	; 0xf4 <main+0x80>
+ {
+  inhibitBus(true); // prevent keyboard transmit while decoding current command 
+ 12c:	81 e0       	ldi	r24, 0x01	; 1
+ 12e:	a0 d1       	rcall	.+832    	; 0x470 <inhibitBus>
+  if(getATCode(&keyCode)) // keyboard sent a code?
+ 130:	c7 01       	movw	r24, r14
+ 132:	7e d2       	rcall	.+1276   	; 0x630 <getATCode>
+ 134:	88 23       	and	r24, r24
+ 136:	09 f4       	brne	.+2      	; 0x13a <main+0xc6>
+ 138:	93 c0       	rjmp	.+294    	; 0x260 <__stack+0x101>
+  {
+   switch (keyCode)
+ 13a:	89 81       	ldd	r24, Y+1	; 0x01
+ 13c:	88 35       	cpi	r24, 0x58	; 88
+ 13e:	09 f4       	brne	.+2      	; 0x142 <main+0xce>
+ 140:	5e c0       	rjmp	.+188    	; 0x1fe <__stack+0x9f>
+ 142:	89 35       	cpi	r24, 0x59	; 89
+ 144:	88 f4       	brcc	.+34     	; 0x168 <__stack+0x9>
+ 146:	86 33       	cpi	r24, 0x36	; 54
+ 148:	e9 f1       	breq	.+122    	; 0x1c4 <__stack+0x65>
+ 14a:	87 33       	cpi	r24, 0x37	; 55
+ 14c:	38 f4       	brcc	.+14     	; 0x15c <main+0xe8>
+ 14e:	82 31       	cpi	r24, 0x12	; 18
+ 150:	09 f4       	brne	.+2      	; 0x154 <main+0xe0>
+ 152:	52 c0       	rjmp	.+164    	; 0x1f8 <__stack+0x99>
+ 154:	8e 31       	cpi	r24, 0x1E	; 30
+ 156:	09 f0       	breq	.+2      	; 0x15a <main+0xe6>
+ 158:	80 c0       	rjmp	.+256    	; 0x25a <__stack+0xfb>
+ 15a:	2f c0       	rjmp	.+94     	; 0x1ba <__stack+0x5b>
+ 15c:	8e 33       	cpi	r24, 0x3E	; 62
+ 15e:	b9 f1       	breq	.+110    	; 0x1ce <__stack+0x6f>
+ 160:	86 34       	cpi	r24, 0x46	; 70
+ 162:	09 f0       	breq	.+2      	; 0x166 <__stack+0x7>
+ 164:	7a c0       	rjmp	.+244    	; 0x25a <__stack+0xfb>
+ 166:	3c c0       	rjmp	.+120    	; 0x1e0 <__stack+0x81>
+ 168:	8a 3a       	cpi	r24, 0xAA	; 170
+ 16a:	89 f0       	breq	.+34     	; 0x18e <__stack+0x2f>
+ 16c:	8b 3a       	cpi	r24, 0xAB	; 171
+ 16e:	38 f4       	brcc	.+14     	; 0x17e <__stack+0x1f>
+ 170:	89 35       	cpi	r24, 0x59	; 89
+ 172:	09 f4       	brne	.+2      	; 0x176 <__stack+0x17>
+ 174:	43 c0       	rjmp	.+134    	; 0x1fc <__stack+0x9d>
+ 176:	83 38       	cpi	r24, 0x83	; 131
+ 178:	09 f0       	breq	.+2      	; 0x17c <__stack+0x1d>
+ 17a:	6f c0       	rjmp	.+222    	; 0x25a <__stack+0xfb>
+ 17c:	39 c0       	rjmp	.+114    	; 0x1f0 <__stack+0x91>
+ 17e:	80 3e       	cpi	r24, 0xE0	; 224
+ 180:	09 f4       	brne	.+2      	; 0x184 <__stack+0x25>
+ 182:	40 c0       	rjmp	.+128    	; 0x204 <__stack+0xa5>
+ 184:	80 3f       	cpi	r24, 0xF0	; 240
+ 186:	09 f0       	breq	.+2      	; 0x18a <__stack+0x2b>
+ 188:	68 c0       	rjmp	.+208    	; 0x25a <__stack+0xfb>
+ 18a:	11 e0       	ldi	r17, 0x01	; 1
+ 18c:	67 c0       	rjmp	.+206    	; 0x25c <__stack+0xfd>
+   {
+    case 0xaa: // power-up status, might confuse the dtv
+              sendBytes("\x42"); // send k to dtv so it goes to basic
+ 18e:	80 e6       	ldi	r24, 0x60	; 96
+ 190:	90 e0       	ldi	r25, 0x00	; 0
+ 192:	61 df       	rcall	.-318    	; 0x56 <sendBytes>
+		  delay_ms(1000); 
+ 194:	88 ee       	ldi	r24, 0xE8	; 232
+ 196:	93 e0       	ldi	r25, 0x03	; 3
+ 198:	d4 d2       	rcall	.+1448   	; 0x742 <delay_ms>
+		  sendBytes("\xf0\x42");  // send release code for k
+ 19a:	82 e6       	ldi	r24, 0x62	; 98
+ 19c:	90 e0       	ldi	r25, 0x00	; 0
+ 19e:	5b df       	rcall	.-330    	; 0x56 <sendBytes>
+              delay_ms(15);       // give DTV some time
+ 1a0:	8f e0       	ldi	r24, 0x0F	; 15
+ 1a2:	90 e0       	ldi	r25, 0x00	; 0
+ 1a4:	ce d2       	rcall	.+1436   	; 0x742 <delay_ms>
+              sendBytes("\x66");  // send back space
+ 1a6:	85 e6       	ldi	r24, 0x65	; 101
+ 1a8:	90 e0       	ldi	r25, 0x00	; 0
+ 1aa:	55 df       	rcall	.-342    	; 0x56 <sendBytes>
+              delay_ms(15);       // give DTV some time
+ 1ac:	8f e0       	ldi	r24, 0x0F	; 15
+ 1ae:	90 e0       	ldi	r25, 0x00	; 0
+ 1b0:	c8 d2       	rcall	.+1424   	; 0x742 <delay_ms>
+		  sendBytes("\xf0\x66"); // send release code back space
+ 1b2:	87 e6       	ldi	r24, 0x67	; 103
+ 1b4:	90 e0       	ldi	r25, 0x00	; 0
+ 1b6:	4f df       	rcall	.-354    	; 0x56 <sendBytes>
+ 1b8:	57 c0       	rjmp	.+174    	; 0x268 <__stack+0x109>
+              suppress = 1;
+              brk = 0;
+              break;
+
+    case 0x1e: // key for '2' - SHIFT-2 is " on german keyboards
+              if(shift == 1)
+ 1ba:	01 30       	cpi	r16, 0x01	; 1
+ 1bc:	09 f0       	breq	.+2      	; 0x1c0 <__stack+0x61>
+ 1be:	4d c0       	rjmp	.+154    	; 0x25a <__stack+0xfb>
+              {
+               keyCode = 0x52; // output '"' on SHIFT-2
+ 1c0:	a9 82       	std	Y+1, r10	; 0x01
+ 1c2:	4b c0       	rjmp	.+150    	; 0x25a <__stack+0xfb>
+              }
+              brk = 0;
+              break;
+
+    case 0x36: // key for '6' - SHIFT-6 is & on german keyboards
+              if(shift == 1)
+ 1c4:	01 30       	cpi	r16, 0x01	; 1
+ 1c6:	09 f0       	breq	.+2      	; 0x1ca <__stack+0x6b>
+ 1c8:	48 c0       	rjmp	.+144    	; 0x25a <__stack+0xfb>
+              {
+               keyCode = 0x3d; // output '&' on SHIFT-6
+ 1ca:	99 82       	std	Y+1, r9	; 0x01
+ 1cc:	46 c0       	rjmp	.+140    	; 0x25a <__stack+0xfb>
+              brk = 0;
+              break;
+
+
+    case 0x3e: // key for '8'
+              if(shift == 1)
+ 1ce:	01 30       	cpi	r16, 0x01	; 1
+ 1d0:	09 f4       	brne	.+2      	; 0x1d4 <__stack+0x75>
+              {
+               keyCode = 0x46; // output '(' on SHIFT-8
+ 1d2:	79 82       	std	Y+1, r7	; 0x01
+              }
+              if(altgr == 1)
+ 1d4:	8b 81       	ldd	r24, Y+3	; 0x03
+ 1d6:	81 30       	cpi	r24, 0x01	; 1
+ 1d8:	09 f0       	breq	.+2      	; 0x1dc <__stack+0x7d>
+ 1da:	3f c0       	rjmp	.+126    	; 0x25a <__stack+0xfb>
+              {
+               keyCode = 0x54; // output '[' on ALTGR-8
+ 1dc:	89 82       	std	Y+1, r8	; 0x01
+ 1de:	3d c0       	rjmp	.+122    	; 0x25a <__stack+0xfb>
+              }
+              brk = 0;
+              break;
+
+    case 0x46: // key for '9'
+              if(shift == 1)
+ 1e0:	01 30       	cpi	r16, 0x01	; 1
+ 1e2:	09 f4       	brne	.+2      	; 0x1e6 <__stack+0x87>
+              {
+               keyCode = 0x45; // output ')' on SHIFT-9
+ 1e4:	c9 82       	std	Y+1, r12	; 0x01
+              }
+              if(altgr == 1)
+ 1e6:	8b 81       	ldd	r24, Y+3	; 0x03
+ 1e8:	81 30       	cpi	r24, 0x01	; 1
+ 1ea:	b9 f5       	brne	.+110    	; 0x25a <__stack+0xfb>
+              {
+               keyCode = 0x5b; // output ']' on ALTGR-9
+ 1ec:	d9 82       	std	Y+1, r13	; 0x01
+ 1ee:	35 c0       	rjmp	.+106    	; 0x25a <__stack+0xfb>
+              }
+              brk = 0;
+              break;
+
+    case 0x83: // scan-code for F7
+              sendScanCode(0xe0); // make this 0xe0 0x03 to fix
+ 1f0:	80 ee       	ldi	r24, 0xE0	; 224
+ 1f2:	c4 d0       	rcall	.+392    	; 0x37c <sendScanCode>
+              keyCode = 0x03;     // a bug in the DTV
+ 1f4:	49 82       	std	Y+1, r4	; 0x01
+ 1f6:	31 c0       	rjmp	.+98     	; 0x25a <__stack+0xfb>
+    case 0xf0: // break-code
+              brk = 1;
+              break;
+
+    case 0x12: // lshift
+              keyCode = 0x59; // make this the correct l-shift for C64
+ 1f8:	b9 82       	std	Y+1, r11	; 0x01
+ 1fa:	01 c0       	rjmp	.+2      	; 0x1fe <__stack+0x9f>
+              }
+              brk = 0;
+              break;
+
+    case 0x59: // rshift
+              keyCode = 0x12; // make this the correct r-shift for C64
+ 1fc:	59 82       	std	Y+1, r5	; 0x01
+              if(brk == 1)
+ 1fe:	11 30       	cpi	r17, 0x01	; 1
+ 200:	59 f5       	brne	.+86     	; 0x258 <__stack+0xf9>
+ 202:	28 c0       	rjmp	.+80     	; 0x254 <__stack+0xf5>
+              }
+              brk = 0;
+              break;
+
+    case 0xe0: // we have a combined key-code
+               inhibitBus(false); // enable keyboard transmit
+ 204:	80 e0       	ldi	r24, 0x00	; 0
+ 206:	34 d1       	rcall	.+616    	; 0x470 <inhibitBus>
+               while(!AThit()); // wait for next code to finish
+ 208:	30 d1       	rcall	.+608    	; 0x46a <AThit>
+ 20a:	88 23       	and	r24, r24
+ 20c:	e9 f3       	breq	.-6      	; 0x208 <__stack+0xa9>
+               inhibitBus(true); // prevent keyboard transmit while decoding current command 
+ 20e:	81 e0       	ldi	r24, 0x01	; 1
+ 210:	2f d1       	rcall	.+606    	; 0x470 <inhibitBus>
+               getATCode(&keyCode); // get next code
+ 212:	c7 01       	movw	r24, r14
+ 214:	0d d2       	rcall	.+1050   	; 0x630 <getATCode>
+
+               if(keyCode == 0xf0) // we have a break-code
+ 216:	89 81       	ldd	r24, Y+1	; 0x01
+ 218:	80 3f       	cpi	r24, 0xF0	; 240
+ 21a:	51 f4       	brne	.+20     	; 0x230 <__stack+0xd1>
+               {
+                brk = 1;
+                inhibitBus(false); // enable keyboard transmit
+ 21c:	80 e0       	ldi	r24, 0x00	; 0
+ 21e:	28 d1       	rcall	.+592    	; 0x470 <inhibitBus>
+                while(!AThit()); // wait for next code to finish
+ 220:	24 d1       	rcall	.+584    	; 0x46a <AThit>
+ 222:	88 23       	and	r24, r24
+ 224:	e9 f3       	breq	.-6      	; 0x220 <__stack+0xc1>
+                inhibitBus(true); // prevent keyboard transmit while decoding current command 
+ 226:	81 e0       	ldi	r24, 0x01	; 1
+ 228:	23 d1       	rcall	.+582    	; 0x470 <inhibitBus>
+                getATCode(&keyCode); // get next code
+ 22a:	c7 01       	movw	r24, r14
+ 22c:	01 d2       	rcall	.+1026   	; 0x630 <getATCode>
+ 22e:	11 e0       	ldi	r17, 0x01	; 1
+               }
+
+               if(keyCode == 0x11) // ALTGR
+ 230:	89 81       	ldd	r24, Y+1	; 0x01
+ 232:	81 31       	cpi	r24, 0x11	; 17
+ 234:	29 f4       	brne	.+10     	; 0x240 <__stack+0xe1>
+               {
+                if(brk == 1)
+ 236:	11 30       	cpi	r17, 0x01	; 1
+ 238:	b1 f0       	breq	.+44     	; 0x266 <__stack+0x107>
+ 23a:	81 e0       	ldi	r24, 0x01	; 1
+ 23c:	8b 83       	std	Y+3, r24	; 0x03
+ 23e:	14 c0       	rjmp	.+40     	; 0x268 <__stack+0x109>
+                suppress = 1;
+                brk = 0;
+                break;
+               }
+
+               sendScanCode(0xe0); // send special make
+ 240:	80 ee       	ldi	r24, 0xE0	; 224
+ 242:	9c d0       	rcall	.+312    	; 0x37c <sendScanCode>
+               if(brk == 1)
+ 244:	11 30       	cpi	r17, 0x01	; 1
+ 246:	11 f4       	brne	.+4      	; 0x24c <__stack+0xed>
+               {
+                sendScanCode(0xf0); // send break-code
+ 248:	80 ef       	ldi	r24, 0xF0	; 240
+ 24a:	98 d0       	rcall	.+304    	; 0x37c <sendScanCode>
+               }
+               delay_ms(15);       // give DTV some time
+ 24c:	8f e0       	ldi	r24, 0x0F	; 15
+ 24e:	90 e0       	ldi	r25, 0x00	; 0
+ 250:	78 d2       	rcall	.+1264   	; 0x742 <delay_ms>
+ 252:	03 c0       	rjmp	.+6      	; 0x25a <__stack+0xfb>
+
+               brk = 0;
+               break;
+ 254:	00 e0       	ldi	r16, 0x00	; 0
+ 256:	01 c0       	rjmp	.+2      	; 0x25a <__stack+0xfb>
+ 258:	01 e0       	ldi	r16, 0x01	; 1
+ 25a:	10 e0       	ldi	r17, 0x00	; 0
+              break;
+   }
+
+   if(suppress == 0)
+   {
+    sendScanCode(keyCode); // send the code to the pc
+ 25c:	89 81       	ldd	r24, Y+1	; 0x01
+ 25e:	8e d0       	rcall	.+284    	; 0x37c <sendScanCode>
+    suppress = 0; 
+   }
+
+  } // end of if
+
+ inhibitBus(false); // enable keyboard transmit
+ 260:	80 e0       	ldi	r24, 0x00	; 0
+ 262:	06 d1       	rcall	.+524    	; 0x470 <inhibitBus>
+ 264:	47 cf       	rjmp	.-370    	; 0xf4 <main+0x80>
+ 266:	1b 82       	std	Y+3, r1	; 0x03
+ 268:	10 e0       	ldi	r17, 0x00	; 0
+ 26a:	fa cf       	rjmp	.-12     	; 0x260 <__stack+0x101>
+
+0000026c <device_init>:
+
+
+/* public function definitions ****************************************************************/
+// initialize io lines
+void device_init(void){
+	output_pulled_up(CLOCKP);			//emulate hardwire pullup at powerup 
+ 26c:	84 e0       	ldi	r24, 0x04	; 4
+ 26e:	36 d2       	rcall	.+1132   	; 0x6dc <output_pulled_up>
+	output_pulled_up(DATAP);			//emulate hardwire pullup at powerup 
+ 270:	83 e0       	ldi	r24, 0x03	; 3
+ 272:	34 d2       	rcall	.+1128   	; 0x6dc <output_pulled_up>
+}
+ 274:	08 95       	ret
+
+00000276 <getBusState>:
+/*data	clock	ATBusStateType
+ *	0	1		HOST_RTS=1
+ *	1	0		INHIBIT=2
+ *	1	1		IDLE=3
+ */
+enum ATBusStateType getBusState(){
+ 276:	1f 93       	push	r17
+	enum ATBusStateType state = 0;
+	if(input(CLOCKP))
+ 278:	84 e0       	ldi	r24, 0x04	; 4
+ 27a:	40 d2       	rcall	.+1152   	; 0x6fc <input>
+ 27c:	18 2f       	mov	r17, r24
+		bit_set(state,0);
+	if(input(DATAP))
+ 27e:	83 e0       	ldi	r24, 0x03	; 3
+ 280:	3d d2       	rcall	.+1146   	; 0x6fc <input>
+ 282:	81 11       	cpse	r24, r1
+		bit_set(state,1);
+ 284:	12 60       	ori	r17, 0x02	; 2
+	return state;
+}
+ 286:	81 2f       	mov	r24, r17
+ 288:	1f 91       	pop	r17
+ 28a:	08 95       	ret
+
+0000028c <getBit>:
+	output_pulled_up(CLOCKP);		// toggle clock high to setup next bit 
+}
+
+// get a data bit from host while driving clock, device reads while clock is high
+// set ack argument true to drive the ack signal on the data pin (end of frame bit 10)
+bool getBit(bool ack){
+ 28c:	0f 93       	push	r16
+ 28e:	1f 93       	push	r17
+ 290:	18 2f       	mov	r17, r24
+	bool bitVal;
+	delay_us(15);
+ 292:	8f e0       	ldi	r24, 0x0F	; 15
+ 294:	90 e0       	ldi	r25, 0x00	; 0
+ 296:	63 d2       	rcall	.+1222   	; 0x75e <delay_us>
+	bitVal=input(DATAP);			// read data value
+ 298:	83 e0       	ldi	r24, 0x03	; 3
+ 29a:	30 d2       	rcall	.+1120   	; 0x6fc <input>
+ 29c:	08 2f       	mov	r16, r24
+	delay_us(15);		
+ 29e:	8f e0       	ldi	r24, 0x0F	; 15
+ 2a0:	90 e0       	ldi	r25, 0x00	; 0
+ 2a2:	5d d2       	rcall	.+1210   	; 0x75e <delay_us>
+	output_low(CLOCKP);				// toggle clock low 
+ 2a4:	84 e0       	ldi	r24, 0x04	; 4
+ 2a6:	fc d1       	rcall	.+1016   	; 0x6a0 <output_low>
+	if (ack)						// if ack request (bitVal should also be high) 
+ 2a8:	11 23       	and	r17, r17
+ 2aa:	11 f0       	breq	.+4      	; 0x2b0 <getBit+0x24>
+		output_low(DATAP);			// drive data line low to ack 
+ 2ac:	83 e0       	ldi	r24, 0x03	; 3
+ 2ae:	f8 d1       	rcall	.+1008   	; 0x6a0 <output_low>
+
+	delay_us(38);
+ 2b0:	86 e2       	ldi	r24, 0x26	; 38
+ 2b2:	90 e0       	ldi	r25, 0x00	; 0
+ 2b4:	54 d2       	rcall	.+1192   	; 0x75e <delay_us>
+	output_pulled_up(CLOCKP);		// toggle clock high to setup next bit 
+ 2b6:	84 e0       	ldi	r24, 0x04	; 4
+ 2b8:	11 d2       	rcall	.+1058   	; 0x6dc <output_pulled_up>
+	if (ack){
+ 2ba:	11 23       	and	r17, r17
+ 2bc:	29 f0       	breq	.+10     	; 0x2c8 <getBit+0x3c>
+		delay_us(10);
+ 2be:	8a e0       	ldi	r24, 0x0A	; 10
+ 2c0:	90 e0       	ldi	r25, 0x00	; 0
+ 2c2:	4d d2       	rcall	.+1178   	; 0x75e <delay_us>
+		output_pulled_up(DATAP);
+ 2c4:	83 e0       	ldi	r24, 0x03	; 3
+ 2c6:	0a d2       	rcall	.+1044   	; 0x6dc <output_pulled_up>
+	}
+	return bitVal;
+}
+ 2c8:	80 2f       	mov	r24, r16
+ 2ca:	1f 91       	pop	r17
+ 2cc:	0f 91       	pop	r16
+ 2ce:	08 95       	ret
+
+000002d0 <getScanCode>:
+	return state;
+}
+
+// decodes a scan code frame from the PC, returns true if successful
+// passes 8 bit command byte by reference via function argument *codeRef
+bool getScanCode(uint8_t *codeRef){
+ 2d0:	bf 92       	push	r11
+ 2d2:	cf 92       	push	r12
+ 2d4:	df 92       	push	r13
+ 2d6:	ef 92       	push	r14
+ 2d8:	ff 92       	push	r15
+ 2da:	0f 93       	push	r16
+ 2dc:	1f 93       	push	r17
+ 2de:	cf 93       	push	r28
+ 2e0:	df 93       	push	r29
+ 2e2:	6c 01       	movw	r12, r24
+	bool ss;
+	bool parity;
+	bool good = true;
+	uint8_t i;
+	uint8_t code = 0;
+	cli();									//disable interrupts
+ 2e4:	f8 94       	cli
+	ss=getBit(false);						//start bit
+ 2e6:	80 e0       	ldi	r24, 0x00	; 0
+ 2e8:	d1 df       	rcall	.-94     	; 0x28c <getBit>
+ 2ea:	b8 2e       	mov	r11, r24
+ 2ec:	00 e0       	ldi	r16, 0x00	; 0
+ 2ee:	c0 e0       	ldi	r28, 0x00	; 0
+ 2f0:	d0 e0       	ldi	r29, 0x00	; 0
+	if(ss==true) good=false;
+	for(i=0;i<8;i++){						//get each bit, lsb first
+		if(getBit(false)) bit_set(code,i);
+ 2f2:	81 e0       	ldi	r24, 0x01	; 1
+ 2f4:	e8 2e       	mov	r14, r24
+ 2f6:	f1 2c       	mov	r15, r1
+ 2f8:	80 e0       	ldi	r24, 0x00	; 0
+ 2fa:	c8 df       	rcall	.-112    	; 0x28c <getBit>
+ 2fc:	88 23       	and	r24, r24
+ 2fe:	41 f0       	breq	.+16     	; 0x310 <getScanCode+0x40>
+ 300:	c7 01       	movw	r24, r14
+ 302:	0c 2e       	mov	r0, r28
+ 304:	02 c0       	rjmp	.+4      	; 0x30a <getScanCode+0x3a>
+ 306:	88 0f       	add	r24, r24
+ 308:	99 1f       	adc	r25, r25
+ 30a:	0a 94       	dec	r0
+ 30c:	e2 f7       	brpl	.-8      	; 0x306 <getScanCode+0x36>
+ 30e:	08 2b       	or	r16, r24
+ 310:	21 96       	adiw	r28, 0x01	; 1
+	uint8_t i;
+	uint8_t code = 0;
+	cli();									//disable interrupts
+	ss=getBit(false);						//start bit
+	if(ss==true) good=false;
+	for(i=0;i<8;i++){						//get each bit, lsb first
+ 312:	c8 30       	cpi	r28, 0x08	; 8
+ 314:	d1 05       	cpc	r29, r1
+ 316:	81 f7       	brne	.-32     	; 0x2f8 <getScanCode+0x28>
+		if(getBit(false)) bit_set(code,i);
+	}
+	parity=getBit(false);					//parity
+ 318:	80 e0       	ldi	r24, 0x00	; 0
+ 31a:	b8 df       	rcall	.-144    	; 0x28c <getBit>
+ 31c:	18 2f       	mov	r17, r24
+	getBit(true);							//send ack pulse
+ 31e:	81 e0       	ldi	r24, 0x01	; 1
+ 320:	b5 df       	rcall	.-150    	; 0x28c <getBit>
+	sei();									//enable interrupts
+ 322:	78 94       	sei
+	if(parity == calcParity(code))			//check parity
+ 324:	80 2f       	mov	r24, r16
+ 326:	00 d2       	rcall	.+1024   	; 0x728 <calcParity>
+ 328:	18 17       	cp	r17, r24
+ 32a:	11 f4       	brne	.+4      	; 0x330 <getScanCode+0x60>
+ 32c:	80 e0       	ldi	r24, 0x00	; 0
+ 32e:	02 c0       	rjmp	.+4      	; 0x334 <getScanCode+0x64>
+ 330:	81 e0       	ldi	r24, 0x01	; 1
+ 332:	8b 25       	eor	r24, r11
+		good = false;						//parity check failed
+	*codeRef = code;						//setup to return value by ref
+ 334:	f6 01       	movw	r30, r12
+ 336:	00 83       	st	Z, r16
+	return good;							//return true if scancode is good
+}
+ 338:	df 91       	pop	r29
+ 33a:	cf 91       	pop	r28
+ 33c:	1f 91       	pop	r17
+ 33e:	0f 91       	pop	r16
+ 340:	ff 90       	pop	r15
+ 342:	ef 90       	pop	r14
+ 344:	df 90       	pop	r13
+ 346:	cf 90       	pop	r12
+ 348:	bf 90       	pop	r11
+ 34a:	08 95       	ret
+
+0000034c <sendBit>:
+uint8_t lastSent = 0xFE;	// init as code to send if no code sent
+
+
+/* define utility functions ********************************************************************/
+// this function assumes that clock has been high for at least 5us, and exits with clock high
+void sendBit(bool bitVal){	// this function manipulates the IO data and clock to send one bit
+ 34c:	1f 93       	push	r17
+ 34e:	18 2f       	mov	r17, r24
+	delay_us(15);	
+ 350:	8f e0       	ldi	r24, 0x0F	; 15
+ 352:	90 e0       	ldi	r25, 0x00	; 0
+ 354:	04 d2       	rcall	.+1032   	; 0x75e <delay_us>
+	if (bitVal)	// set data 
+ 356:	11 23       	and	r17, r17
+ 358:	19 f0       	breq	.+6      	; 0x360 <sendBit+0x14>
+		output_pulled_up(DATAP);
+ 35a:	83 e0       	ldi	r24, 0x03	; 3
+ 35c:	bf d1       	rcall	.+894    	; 0x6dc <output_pulled_up>
+ 35e:	02 c0       	rjmp	.+4      	; 0x364 <sendBit+0x18>
+	else
+		output_low(DATAP);
+ 360:	83 e0       	ldi	r24, 0x03	; 3
+ 362:	9e d1       	rcall	.+828    	; 0x6a0 <output_low>
+	delay_us(15);	
+ 364:	8f e0       	ldi	r24, 0x0F	; 15
+ 366:	90 e0       	ldi	r25, 0x00	; 0
+ 368:	fa d1       	rcall	.+1012   	; 0x75e <delay_us>
+	output_low(CLOCKP);				// toggle clock low to load data
+ 36a:	84 e0       	ldi	r24, 0x04	; 4
+ 36c:	99 d1       	rcall	.+818    	; 0x6a0 <output_low>
+	delay_us(38);
+ 36e:	86 e2       	ldi	r24, 0x26	; 38
+ 370:	90 e0       	ldi	r25, 0x00	; 0
+ 372:	f5 d1       	rcall	.+1002   	; 0x75e <delay_us>
+	output_pulled_up(CLOCKP);		// toggle clock high to setup next bit 
+ 374:	84 e0       	ldi	r24, 0x04	; 4
+ 376:	b2 d1       	rcall	.+868    	; 0x6dc <output_pulled_up>
+}
+ 378:	1f 91       	pop	r17
+ 37a:	08 95       	ret
+
+0000037c <sendScanCode>:
+	sendScanCode(lastSent);
+}
+#endif
+
+//sends a scan code frame to the PC
+void sendScanCode(uint8_t code){
+ 37c:	ef 92       	push	r14
+ 37e:	ff 92       	push	r15
+ 380:	0f 93       	push	r16
+ 382:	1f 93       	push	r17
+ 384:	cf 93       	push	r28
+ 386:	df 93       	push	r29
+ 388:	f8 2e       	mov	r15, r24
+	bool parity;
+	uint8_t i=0;
+	parity = !(calcParity(code));
+ 38a:	ce d1       	rcall	.+924    	; 0x728 <calcParity>
+ 38c:	e8 2e       	mov	r14, r24
+ 38e:	10 e0       	ldi	r17, 0x00	; 0
+
+	do{									// loop until bus in idle state and stable
+		if(getBusState() == IDLE)
+ 390:	72 df       	rcall	.-284    	; 0x276 <getBusState>
+ 392:	83 30       	cpi	r24, 0x03	; 3
+ 394:	e1 f7       	brne	.-8      	; 0x38e <sendScanCode+0x12>
+			++i;						// increment count
+ 396:	1f 5f       	subi	r17, 0xFF	; 255
+		else
+			i=0;						// reset count
+	}while (i<5);						// loop until bus is idle for at leat 100 us
+ 398:	15 30       	cpi	r17, 0x05	; 5
+ 39a:	d0 f3       	brcs	.-12     	; 0x390 <sendScanCode+0x14>
+	
+	cli();								// disable interrupts
+ 39c:	f8 94       	cli
+	sendBit(0);							// start bit
+ 39e:	80 e0       	ldi	r24, 0x00	; 0
+ 3a0:	d5 df       	rcall	.-86     	; 0x34c <sendBit>
+ 3a2:	c0 e0       	ldi	r28, 0x00	; 0
+ 3a4:	d0 e0       	ldi	r29, 0x00	; 0
+	for(i=0;i<8;i++){					// send each bit, lsb first
+		sendBit(bit_test(code,i));
+ 3a6:	0f 2d       	mov	r16, r15
+ 3a8:	10 e0       	ldi	r17, 0x00	; 0
+ 3aa:	c8 01       	movw	r24, r16
+ 3ac:	0c 2e       	mov	r0, r28
+ 3ae:	02 c0       	rjmp	.+4      	; 0x3b4 <sendScanCode+0x38>
+ 3b0:	95 95       	asr	r25
+ 3b2:	87 95       	ror	r24
+ 3b4:	0a 94       	dec	r0
+ 3b6:	e2 f7       	brpl	.-8      	; 0x3b0 <sendScanCode+0x34>
+ 3b8:	81 70       	andi	r24, 0x01	; 1
+ 3ba:	c8 df       	rcall	.-112    	; 0x34c <sendBit>
+ 3bc:	21 96       	adiw	r28, 0x01	; 1
+			i=0;						// reset count
+	}while (i<5);						// loop until bus is idle for at leat 100 us
+	
+	cli();								// disable interrupts
+	sendBit(0);							// start bit
+	for(i=0;i<8;i++){					// send each bit, lsb first
+ 3be:	c8 30       	cpi	r28, 0x08	; 8
+ 3c0:	d1 05       	cpc	r29, r1
+ 3c2:	99 f7       	brne	.-26     	; 0x3aa <sendScanCode+0x2e>
+		sendBit(bit_test(code,i));
+	}
+	sendBit(parity);					// send parity
+ 3c4:	81 e0       	ldi	r24, 0x01	; 1
+ 3c6:	8e 25       	eor	r24, r14
+ 3c8:	c1 df       	rcall	.-126    	; 0x34c <sendBit>
+	sendBit(1);							// stop bit
+ 3ca:	81 e0       	ldi	r24, 0x01	; 1
+ 3cc:	bf df       	rcall	.-130    	; 0x34c <sendBit>
+	sei();								// enable interrupts
+ 3ce:	78 94       	sei
+	lastSent = code;
+ 3d0:	f0 92 6a 00 	sts	0x006A, r15
+
+}
+ 3d4:	df 91       	pop	r29
+ 3d6:	cf 91       	pop	r28
+ 3d8:	1f 91       	pop	r17
+ 3da:	0f 91       	pop	r16
+ 3dc:	ff 90       	pop	r15
+ 3de:	ef 90       	pop	r14
+ 3e0:	08 95       	ret
+
+000003e2 <receiveScanCode>:
+
+
+// this function waits for the rst bus condition, gets a code, verifies it, and if not valid, retries
+// returns a valid 8 bit scan code 
+uint8_t receiveScanCode(void){
+ 3e2:	ef 92       	push	r14
+ 3e4:	ff 92       	push	r15
+ 3e6:	1f 93       	push	r17
+ 3e8:	df 93       	push	r29
+ 3ea:	cf 93       	push	r28
+ 3ec:	0f 92       	push	r0
+ 3ee:	cd b7       	in	r28, 0x3d	; 61
+ 3f0:	de b7       	in	r29, 0x3e	; 62
+ 3f2:	10 e0       	ldi	r17, 0x00	; 0
+				i++;					// increment count
+			else
+				i=0;					// reset count
+		}while (i<4);					// loop until bus is RTS for at leat 50 us
+
+		good=getScanCode(&code);
+ 3f4:	7e 01       	movw	r14, r28
+ 3f6:	08 94       	sec
+ 3f8:	e1 1c       	adc	r14, r1
+ 3fa:	f1 1c       	adc	r15, r1
+ 3fc:	01 c0       	rjmp	.+2      	; 0x400 <receiveScanCode+0x1e>
+}
+
+
+// this function waits for the rst bus condition, gets a code, verifies it, and if not valid, retries
+// returns a valid 8 bit scan code 
+uint8_t receiveScanCode(void){
+ 3fe:	10 e0       	ldi	r17, 0x00	; 0
+	uint8_t code;
+	uint8_t i=0;
+	bool good;
+	do{
+		do{
+			if(getBusState() == HOST_RTS)
+ 400:	3a df       	rcall	.-396    	; 0x276 <getBusState>
+ 402:	81 30       	cpi	r24, 0x01	; 1
+ 404:	e1 f7       	brne	.-8      	; 0x3fe <receiveScanCode+0x1c>
+				i++;					// increment count
+ 406:	1f 5f       	subi	r17, 0xFF	; 255
+			else
+				i=0;					// reset count
+		}while (i<4);					// loop until bus is RTS for at leat 50 us
+ 408:	14 30       	cpi	r17, 0x04	; 4
+ 40a:	d0 f3       	brcs	.-12     	; 0x400 <receiveScanCode+0x1e>
+
+		good=getScanCode(&code);
+ 40c:	c7 01       	movw	r24, r14
+ 40e:	60 df       	rcall	.-320    	; 0x2d0 <getScanCode>
+
+		if (good)
+ 410:	88 23       	and	r24, r24
+ 412:	31 f4       	brne	.+12     	; 0x420 <receiveScanCode+0x3e>
+			break;						// break out of loop
+		delay_ms(1);
+ 414:	81 e0       	ldi	r24, 0x01	; 1
+ 416:	90 e0       	ldi	r25, 0x00	; 0
+ 418:	94 d1       	rcall	.+808    	; 0x742 <delay_ms>
+		sendScanCode(0xFE);				// send retry command 
+ 41a:	8e ef       	ldi	r24, 0xFE	; 254
+ 41c:	af df       	rcall	.-162    	; 0x37c <sendScanCode>
+ 41e:	f0 cf       	rjmp	.-32     	; 0x400 <receiveScanCode+0x1e>
+	}while(1);
+
+	
+	return code;
+}
+ 420:	89 81       	ldd	r24, Y+1	; 0x01
+ 422:	0f 90       	pop	r0
+ 424:	cf 91       	pop	r28
+ 426:	df 91       	pop	r29
+ 428:	1f 91       	pop	r17
+ 42a:	ff 90       	pop	r15
+ 42c:	ef 90       	pop	r14
+ 42e:	08 95       	ret
+
+00000430 <host_init>:
+volatile bool Transmit;				//tracks if transmitting or receiving
+volatile uint8_t recBit;			//track the received bit number
+
+//call this to initialize hardware, enable global interrupts in mainline code
+void host_init(void){
+	bit_set(MCUCR,ISC01);			//falling edge of int0 (PB2) generates interupt
+ 430:	85 b7       	in	r24, 0x35	; 53
+ 432:	82 60       	ori	r24, 0x02	; 2
+ 434:	85 bf       	out	0x35, r24	; 53
+	bit_set(GIMSK,INT0);			//enable external interrupt 0
+ 436:	8b b7       	in	r24, 0x3b	; 59
+ 438:	80 64       	ori	r24, 0x40	; 64
+ 43a:	8b bf       	out	0x3b, r24	; 59
+	bit_set(TIMSK,TOIE1);			//enable timer 1 interrupt on overflow
+ 43c:	89 b7       	in	r24, 0x39	; 57
+ 43e:	84 60       	ori	r24, 0x04	; 4
+ 440:	89 bf       	out	0x39, r24	; 57
+	ATFrame.data=0;						
+ 442:	10 92 71 00 	sts	0x0071, r1
+ 446:	10 92 70 00 	sts	0x0070, r1
+}
+ 44a:	08 95       	ret
+
+0000044c <__vector_4>:
+
+//timer 1 interrupt on overflow (transmit or receive timed out)
+ISR(TIM1_OVF_vect){	
+ 44c:	1f 92       	push	r1
+ 44e:	0f 92       	push	r0
+ 450:	0f b6       	in	r0, 0x3f	; 63
+ 452:	0f 92       	push	r0
+ 454:	11 24       	eor	r1, r1
+	t1_off();	
+ 456:	10 be       	out	0x30, r1	; 48
+	recBit = 0;				//reset received bit counter
+ 458:	10 92 6e 00 	sts	0x006E, r1
+//	ir_on();				//enable ir interrupt
+	Transmit = false;		//reset in transmit mem
+ 45c:	10 92 6d 00 	sts	0x006D, r1
+//	inhibitBus(false);		//allow keyboard to transmit
+}
+ 460:	0f 90       	pop	r0
+ 462:	0f be       	out	0x3f, r0	; 63
+ 464:	0f 90       	pop	r0
+ 466:	1f 90       	pop	r1
+ 468:	18 95       	reti
+
+0000046a <AThit>:
+	}//end of else
+}
+
+//this function returns true if the keyboard has sent a scancode
+bool AThit(){
+	return ATh;
+ 46a:	80 91 6f 00 	lds	r24, 0x006F
+}
+ 46e:	08 95       	ret
+
+00000470 <inhibitBus>:
+	inhibitBus(false);				//release clock
+}
+
+
+//this function inhibits bus communications by driving the clock line low
+void inhibitBus(bool inh){				
+ 470:	98 2f       	mov	r25, r24
+	if (recBit!=0) return;
+ 472:	80 91 6e 00 	lds	r24, 0x006E
+ 476:	88 23       	and	r24, r24
+ 478:	79 f4       	brne	.+30     	; 0x498 <inhibitBus+0x28>
+
+	if (inh){
+ 47a:	99 23       	and	r25, r25
+ 47c:	31 f0       	breq	.+12     	; 0x48a <inhibitBus+0x1a>
+		bit_clear(GIMSK,INT0);			//disable interrupt 0
+ 47e:	8b b7       	in	r24, 0x3b	; 59
+ 480:	8f 7b       	andi	r24, 0xBF	; 191
+ 482:	8b bf       	out	0x3b, r24	; 59
+		output_low(CLOCKP);				//drive clock low to inhibit coms
+ 484:	82 e0       	ldi	r24, 0x02	; 2
+ 486:	0c d1       	rcall	.+536    	; 0x6a0 <output_low>
+ 488:	08 95       	ret
+	}
+	else{
+		GIFR = _BV(INTF0);				//clear interrupt flag bit (write a 1) to prevent ISR entry upon interupt enable
+ 48a:	80 e4       	ldi	r24, 0x40	; 64
+ 48c:	8a bf       	out	0x3a, r24	; 58
+		bit_set(GIMSK,INT0);			//enable interrupt 1, must enable global interupts in mainline
+ 48e:	8b b7       	in	r24, 0x3b	; 59
+ 490:	80 64       	ori	r24, 0x40	; 64
+ 492:	8b bf       	out	0x3b, r24	; 59
+		output_float(CLOCKP);			//release clock to allow coms
+ 494:	82 e0       	ldi	r24, 0x02	; 2
+ 496:	13 d1       	rcall	.+550    	; 0x6be <output_float>
+ 498:	08 95       	ret
+
+0000049a <__vector_1>:
+//	inhibitBus(false);		//allow keyboard to transmit
+}
+
+//external interrupt 0 ISR (external keyboard clock line)
+ISR(INT0_vect)	
+{
+ 49a:	1f 92       	push	r1
+ 49c:	0f 92       	push	r0
+ 49e:	0f b6       	in	r0, 0x3f	; 63
+ 4a0:	0f 92       	push	r0
+ 4a2:	11 24       	eor	r1, r1
+ 4a4:	2f 93       	push	r18
+ 4a6:	3f 93       	push	r19
+ 4a8:	4f 93       	push	r20
+ 4aa:	5f 93       	push	r21
+ 4ac:	6f 93       	push	r22
+ 4ae:	7f 93       	push	r23
+ 4b0:	8f 93       	push	r24
+ 4b2:	9f 93       	push	r25
+ 4b4:	af 93       	push	r26
+ 4b6:	bf 93       	push	r27
+ 4b8:	ef 93       	push	r30
+ 4ba:	ff 93       	push	r31
+	bool databit;
+	if (!recBit){ 			//enable timer on first bit, have 2 ms to complete
+ 4bc:	80 91 6e 00 	lds	r24, 0x006E
+ 4c0:	88 23       	and	r24, r24
+ 4c2:	19 f4       	brne	.+6      	; 0x4ca <__vector_1+0x30>
+		t1_on_2();			//timer on
+ 4c4:	1f bc       	out	0x2f, r1	; 47
+ 4c6:	87 e0       	ldi	r24, 0x07	; 7
+ 4c8:	80 bf       	out	0x30, r24	; 48
+		}
+	if(Transmit){						//transmit byte
+ 4ca:	80 91 6d 00 	lds	r24, 0x006D
+ 4ce:	88 23       	and	r24, r24
+ 4d0:	a9 f1       	breq	.+106    	; 0x53c <__vector_1+0xa2>
+		if(recBit<9){ 					//edges 0-8, transmit data and parity bit
+ 4d2:	80 91 6e 00 	lds	r24, 0x006E
+ 4d6:	89 30       	cpi	r24, 0x09	; 9
+ 4d8:	b8 f4       	brcc	.+46     	; 0x508 <__vector_1+0x6e>
+			databit=bit_test(ATFrame.data,recBit);
+ 4da:	80 91 6e 00 	lds	r24, 0x006E
+			if (databit) 				//setup data for next falling edge
+ 4de:	21 e0       	ldi	r18, 0x01	; 1
+ 4e0:	30 e0       	ldi	r19, 0x00	; 0
+ 4e2:	02 c0       	rjmp	.+4      	; 0x4e8 <__vector_1+0x4e>
+ 4e4:	22 0f       	add	r18, r18
+ 4e6:	33 1f       	adc	r19, r19
+ 4e8:	8a 95       	dec	r24
+ 4ea:	e2 f7       	brpl	.-8      	; 0x4e4 <__vector_1+0x4a>
+ 4ec:	80 91 70 00 	lds	r24, 0x0070
+ 4f0:	90 91 71 00 	lds	r25, 0x0071
+ 4f4:	28 23       	and	r18, r24
+ 4f6:	39 23       	and	r19, r25
+ 4f8:	23 2b       	or	r18, r19
+ 4fa:	19 f0       	breq	.+6      	; 0x502 <__vector_1+0x68>
+				output_float(DATAP);				
+ 4fc:	81 e0       	ldi	r24, 0x01	; 1
+ 4fe:	df d0       	rcall	.+446    	; 0x6be <output_float>
+ 500:	51 c0       	rjmp	.+162    	; 0x5a4 <__vector_1+0x10a>
+			else
+				output_low(DATAP);
+ 502:	81 e0       	ldi	r24, 0x01	; 1
+ 504:	cd d0       	rcall	.+410    	; 0x6a0 <output_low>
+ 506:	4e c0       	rjmp	.+156    	; 0x5a4 <__vector_1+0x10a>
+		}
+		else{							//edges 9 and 10, stop and ack from device
+			output_float(DATAP);
+ 508:	81 e0       	ldi	r24, 0x01	; 1
+ 50a:	d9 d0       	rcall	.+434    	; 0x6be <output_float>
+			if ((recBit)==10){			//entire frame transmitted
+ 50c:	80 91 6e 00 	lds	r24, 0x006E
+ 510:	8a 30       	cpi	r24, 0x0A	; 10
+ 512:	09 f0       	breq	.+2      	; 0x516 <__vector_1+0x7c>
+ 514:	47 c0       	rjmp	.+142    	; 0x5a4 <__vector_1+0x10a>
+				Transmit = false;
+ 516:	10 92 6d 00 	sts	0x006D, r1
+				t1_off();				//timer off
+ 51a:	10 be       	out	0x30, r1	; 48
+				recBit = 0xFF;			//setup bit count for next pass
+ 51c:	8f ef       	ldi	r24, 0xFF	; 255
+ 51e:	80 93 6e 00 	sts	0x006E, r24
+				while (input(DATAP));	//wait for data to go lo (ack from device)
+ 522:	81 e0       	ldi	r24, 0x01	; 1
+ 524:	eb d0       	rcall	.+470    	; 0x6fc <input>
+ 526:	88 23       	and	r24, r24
+ 528:	e1 f7       	brne	.-8      	; 0x522 <__vector_1+0x88>
+
+//				ir_on();				//enable IR remote  						
+				while (!(input(DATAP)) && !(input(CLOCKP)));	//block until lines released
+ 52a:	81 e0       	ldi	r24, 0x01	; 1
+ 52c:	e7 d0       	rcall	.+462    	; 0x6fc <input>
+ 52e:	88 23       	and	r24, r24
+ 530:	c9 f5       	brne	.+114    	; 0x5a4 <__vector_1+0x10a>
+ 532:	82 e0       	ldi	r24, 0x02	; 2
+ 534:	e3 d0       	rcall	.+454    	; 0x6fc <input>
+ 536:	88 23       	and	r24, r24
+ 538:	c1 f3       	breq	.-16     	; 0x52a <__vector_1+0x90>
+ 53a:	34 c0       	rjmp	.+104    	; 0x5a4 <__vector_1+0x10a>
+		}						
+		++recBit;
+
+	}
+	else{			//receive byte
+		if (ATh) {
+ 53c:	80 91 6f 00 	lds	r24, 0x006F
+ 540:	88 23       	and	r24, r24
+ 542:	a9 f5       	brne	.+106    	; 0x5ae <__vector_1+0x114>
+			return;							//don't process another receive until last command is read
+		}
+
+//		ir_off();							//disable external interrupt 0 (IR remote)
+  						
+		databit = input(DATAP);	//get bit data from IO pin
+ 544:	81 e0       	ldi	r24, 0x01	; 1
+ 546:	da d0       	rcall	.+436    	; 0x6fc <input>
+ 548:	40 91 70 00 	lds	r20, 0x0070
+ 54c:	50 91 71 00 	lds	r21, 0x0071
+		if (databit) 
+ 550:	88 23       	and	r24, r24
+ 552:	61 f0       	breq	.+24     	; 0x56c <__vector_1+0xd2>
+			bit_set(ATFrame.data,recBit);
+ 554:	20 91 6e 00 	lds	r18, 0x006E
+ 558:	81 e0       	ldi	r24, 0x01	; 1
+ 55a:	90 e0       	ldi	r25, 0x00	; 0
+ 55c:	02 c0       	rjmp	.+4      	; 0x562 <__vector_1+0xc8>
+ 55e:	88 0f       	add	r24, r24
+ 560:	99 1f       	adc	r25, r25
+ 562:	2a 95       	dec	r18
+ 564:	e2 f7       	brpl	.-8      	; 0x55e <__vector_1+0xc4>
+ 566:	48 2b       	or	r20, r24
+ 568:	59 2b       	or	r21, r25
+ 56a:	0d c0       	rjmp	.+26     	; 0x586 <__vector_1+0xec>
+		else
+			bit_clear(ATFrame.data,recBit);
+ 56c:	20 91 6e 00 	lds	r18, 0x006E
+ 570:	81 e0       	ldi	r24, 0x01	; 1
+ 572:	90 e0       	ldi	r25, 0x00	; 0
+ 574:	02 c0       	rjmp	.+4      	; 0x57a <__vector_1+0xe0>
+ 576:	88 0f       	add	r24, r24
+ 578:	99 1f       	adc	r25, r25
+ 57a:	2a 95       	dec	r18
+ 57c:	e2 f7       	brpl	.-8      	; 0x576 <__vector_1+0xdc>
+ 57e:	80 95       	com	r24
+ 580:	90 95       	com	r25
+ 582:	48 23       	and	r20, r24
+ 584:	59 23       	and	r21, r25
+ 586:	50 93 71 00 	sts	0x0071, r21
+ 58a:	40 93 70 00 	sts	0x0070, r20
+		if ((recBit)==10){					//entire frame received
+ 58e:	80 91 6e 00 	lds	r24, 0x006E
+ 592:	8a 30       	cpi	r24, 0x0A	; 10
+ 594:	39 f4       	brne	.+14     	; 0x5a4 <__vector_1+0x10a>
+				t1_off();					//timer off
+ 596:	10 be       	out	0x30, r1	; 48
+//				ir_on();					//enable IR remote  						
+				ATh = true;					//set AT hit flag (received scan code)
+ 598:	81 e0       	ldi	r24, 0x01	; 1
+ 59a:	80 93 6f 00 	sts	0x006F, r24
+				recBit = 0xFF;				//setup bit count for next pass
+ 59e:	8f ef       	ldi	r24, 0xFF	; 255
+ 5a0:	80 93 6e 00 	sts	0x006E, r24
+
+		}
+		++recBit;
+ 5a4:	80 91 6e 00 	lds	r24, 0x006E
+ 5a8:	8f 5f       	subi	r24, 0xFF	; 255
+ 5aa:	80 93 6e 00 	sts	0x006E, r24
+
+	}//end of else
+}
+ 5ae:	ff 91       	pop	r31
+ 5b0:	ef 91       	pop	r30
+ 5b2:	bf 91       	pop	r27
+ 5b4:	af 91       	pop	r26
+ 5b6:	9f 91       	pop	r25
+ 5b8:	8f 91       	pop	r24
+ 5ba:	7f 91       	pop	r23
+ 5bc:	6f 91       	pop	r22
+ 5be:	5f 91       	pop	r21
+ 5c0:	4f 91       	pop	r20
+ 5c2:	3f 91       	pop	r19
+ 5c4:	2f 91       	pop	r18
+ 5c6:	0f 90       	pop	r0
+ 5c8:	0f be       	out	0x3f, r0	; 63
+ 5ca:	0f 90       	pop	r0
+ 5cc:	1f 90       	pop	r1
+ 5ce:	18 95       	reti
+
+000005d0 <sendATCommand>:
+	return result;
+}
+
+
+//this function send a PC->keyboard command to the keyboard (such as turn on led's)
+void sendATCommand(uint8_t cmd){
+ 5d0:	1f 93       	push	r17
+ 5d2:	18 2f       	mov	r17, r24
+	while (Transmit);
+ 5d4:	80 91 6d 00 	lds	r24, 0x006D
+ 5d8:	88 23       	and	r24, r24
+ 5da:	e1 f7       	brne	.-8      	; 0x5d4 <sendATCommand+0x4>
+	while (!(input(DATAP)) && !(input(CLOCKP)));	//block if either pin is low or currently transmitting			
+ 5dc:	81 e0       	ldi	r24, 0x01	; 1
+ 5de:	8e d0       	rcall	.+284    	; 0x6fc <input>
+ 5e0:	88 23       	and	r24, r24
+ 5e2:	21 f4       	brne	.+8      	; 0x5ec <sendATCommand+0x1c>
+ 5e4:	82 e0       	ldi	r24, 0x02	; 2
+ 5e6:	8a d0       	rcall	.+276    	; 0x6fc <input>
+ 5e8:	88 23       	and	r24, r24
+ 5ea:	c1 f3       	breq	.-16     	; 0x5dc <sendATCommand+0xc>
+
+//	ir_off();						//disable IR remote
+  		
+	inhibitBus(true);				//inhibit transmission
+ 5ec:	81 e0       	ldi	r24, 0x01	; 1
+ 5ee:	40 df       	rcall	.-384    	; 0x470 <inhibitBus>
+	delay_us(100);
+ 5f0:	84 e6       	ldi	r24, 0x64	; 100
+ 5f2:	90 e0       	ldi	r25, 0x00	; 0
+ 5f4:	b4 d0       	rcall	.+360    	; 0x75e <delay_us>
+	output_low(DATAP);				//pull down data pin
+ 5f6:	81 e0       	ldi	r24, 0x01	; 1
+ 5f8:	53 d0       	rcall	.+166    	; 0x6a0 <output_low>
+	
+	ATFrame.code=cmd;
+ 5fa:	10 93 70 00 	sts	0x0070, r17
+	//calc parity bit
+	if (!(calcParity(cmd)))			//if 1, the code is odd 
+ 5fe:	81 2f       	mov	r24, r17
+ 600:	93 d0       	rcall	.+294    	; 0x728 <calcParity>
+ 602:	20 91 70 00 	lds	r18, 0x0070
+ 606:	30 91 71 00 	lds	r19, 0x0071
+ 60a:	88 23       	and	r24, r24
+ 60c:	11 f4       	brne	.+4      	; 0x612 <sendATCommand+0x42>
+		bit_set(ATFrame.data,8);	//set the parity bit	
+ 60e:	31 60       	ori	r19, 0x01	; 1
+ 610:	01 c0       	rjmp	.+2      	; 0x614 <sendATCommand+0x44>
+	else
+		bit_clear(ATFrame.data,8);	//clear the parity bit
+ 612:	3e 7f       	andi	r19, 0xFE	; 254
+ 614:	30 93 71 00 	sts	0x0071, r19
+ 618:	20 93 70 00 	sts	0x0070, r18
+		
+	Transmit=true;					//data transmit handled in interrupt routine
+ 61c:	81 e0       	ldi	r24, 0x01	; 1
+ 61e:	80 93 6d 00 	sts	0x006D, r24
+	t1_on_32();						//transmit over time timer on
+ 622:	1f bc       	out	0x2f, r1	; 47
+ 624:	8b e0       	ldi	r24, 0x0B	; 11
+ 626:	80 bf       	out	0x30, r24	; 48
+
+	inhibitBus(false);				//release clock
+ 628:	80 e0       	ldi	r24, 0x00	; 0
+ 62a:	22 df       	rcall	.-444    	; 0x470 <inhibitBus>
+}
+ 62c:	1f 91       	pop	r17
+ 62e:	08 95       	ret
+
+00000630 <getATCode>:
+	return ATh;
+}
+
+
+//this function returns true if decoded successfully, value returned by reference
+bool getATCode(uint8_t *retVal){	
+ 630:	cf 93       	push	r28
+ 632:	df 93       	push	r29
+ 634:	ec 01       	movw	r28, r24
+	bool parity;
+	bool result=false;
+	
+	if(ATh){
+ 636:	80 91 6f 00 	lds	r24, 0x006F
+ 63a:	88 23       	and	r24, r24
+ 63c:	01 f1       	breq	.+64     	; 0x67e <getATCode+0x4e>
+		//decode frame (bit#) disc: (0)start (1-8)data (9) parity (10)stop
+		//good frame: start bit =0, stop = 1
+		//if sb=1 or stop=0 return with false
+		if (!(bit_test(ATFrame.data,0)) && bit_test(ATFrame.data,10)){
+ 63e:	80 91 70 00 	lds	r24, 0x0070
+ 642:	90 91 71 00 	lds	r25, 0x0071
+ 646:	80 fd       	sbrc	r24, 0
+ 648:	17 c0       	rjmp	.+46     	; 0x678 <getATCode+0x48>
+ 64a:	92 ff       	sbrs	r25, 2
+ 64c:	15 c0       	rjmp	.+42     	; 0x678 <getATCode+0x48>
+			ATFrame.data = ATFrame.data>>1; //shift data bits (2) into lower byte (which is same location as ATcode	
+ 64e:	96 95       	lsr	r25
+ 650:	87 95       	ror	r24
+ 652:	90 93 71 00 	sts	0x0071, r25
+ 656:	80 93 70 00 	sts	0x0070, r24
+			parity=calcParity(ATFrame.code);
+ 65a:	66 d0       	rcall	.+204    	; 0x728 <calcParity>
+			if (parity != bit_test(ATFrame.data,8)){	//8th bit of frame is parity bit
+ 65c:	90 e0       	ldi	r25, 0x00	; 0
+ 65e:	20 91 71 00 	lds	r18, 0x0071
+ 662:	30 e0       	ldi	r19, 0x00	; 0
+ 664:	21 70       	andi	r18, 0x01	; 1
+ 666:	30 70       	andi	r19, 0x00	; 0
+ 668:	82 17       	cp	r24, r18
+ 66a:	93 07       	cpc	r25, r19
+ 66c:	29 f0       	breq	.+10     	; 0x678 <getATCode+0x48>
+				*retVal = ATFrame.code;
+ 66e:	80 91 70 00 	lds	r24, 0x0070
+ 672:	88 83       	st	Y, r24
+ 674:	81 e0       	ldi	r24, 0x01	; 1
+ 676:	01 c0       	rjmp	.+2      	; 0x67a <getATCode+0x4a>
+ 678:	80 e0       	ldi	r24, 0x00	; 0
+				result = true;
+			}
+		}
+		ATh=false;
+ 67a:	10 92 6f 00 	sts	0x006F, r1
+	}
+	return result;
+}
+ 67e:	df 91       	pop	r29
+ 680:	cf 91       	pop	r28
+ 682:	08 95       	ret
+
+00000684 <output_high>:
+
+/**************** for parts with only one port, functions require only pin number ***************/
+
+//if pin is hi-z, toggle ddr fist to transition through low, port first to transition through pull-up
+void output_high(uint8_t pin){	//set an io high
+	PORT |= _BV(pin);	//update port reg first (transition through pull up)
+ 684:	98 b3       	in	r25, 0x18	; 24
+ 686:	21 e0       	ldi	r18, 0x01	; 1
+ 688:	30 e0       	ldi	r19, 0x00	; 0
+ 68a:	02 c0       	rjmp	.+4      	; 0x690 <output_high+0xc>
+ 68c:	22 0f       	add	r18, r18
+ 68e:	33 1f       	adc	r19, r19
+ 690:	8a 95       	dec	r24
+ 692:	e2 f7       	brpl	.-8      	; 0x68c <output_high+0x8>
+ 694:	92 2b       	or	r25, r18
+ 696:	98 bb       	out	0x18, r25	; 24
+	DDR |= _BV(pin);	//update ddr reg
+ 698:	87 b3       	in	r24, 0x17	; 23
+ 69a:	28 2b       	or	r18, r24
+ 69c:	27 bb       	out	0x17, r18	; 23
+}
+ 69e:	08 95       	ret
+
+000006a0 <output_low>:
+
+//if pin is pulled up, toggle ddr fist to transition through high, port first to transition through hi-z
+void output_low(uint8_t pin){		//set an io low
+	DDR |=_BV(pin);
+ 6a0:	97 b3       	in	r25, 0x17	; 23
+ 6a2:	21 e0       	ldi	r18, 0x01	; 1
+ 6a4:	30 e0       	ldi	r19, 0x00	; 0
+ 6a6:	02 c0       	rjmp	.+4      	; 0x6ac <output_low+0xc>
+ 6a8:	22 0f       	add	r18, r18
+ 6aa:	33 1f       	adc	r19, r19
+ 6ac:	8a 95       	dec	r24
+ 6ae:	e2 f7       	brpl	.-8      	; 0x6a8 <output_low+0x8>
+ 6b0:	92 2b       	or	r25, r18
+ 6b2:	97 bb       	out	0x17, r25	; 23
+	PORT &= ~_BV(pin);
+ 6b4:	88 b3       	in	r24, 0x18	; 24
+ 6b6:	20 95       	com	r18
+ 6b8:	28 23       	and	r18, r24
+ 6ba:	28 bb       	out	0x18, r18	; 24
+}
+ 6bc:	08 95       	ret
+
+000006be <output_float>:
+//	PORT ^= _BV(pin);
+//}
+
+//if pin is high, toggle ddr fist to transition through pull-up, port first to transition through low
+void output_float(uint8_t pin){		//set an io to hi-Z
+	DDR &= ~_BV(pin);
+ 6be:	97 b3       	in	r25, 0x17	; 23
+ 6c0:	21 e0       	ldi	r18, 0x01	; 1
+ 6c2:	30 e0       	ldi	r19, 0x00	; 0
+ 6c4:	02 c0       	rjmp	.+4      	; 0x6ca <output_float+0xc>
+ 6c6:	22 0f       	add	r18, r18
+ 6c8:	33 1f       	adc	r19, r19
+ 6ca:	8a 95       	dec	r24
+ 6cc:	e2 f7       	brpl	.-8      	; 0x6c6 <output_float+0x8>
+ 6ce:	20 95       	com	r18
+ 6d0:	92 23       	and	r25, r18
+ 6d2:	97 bb       	out	0x17, r25	; 23
+	PORT &= ~_BV(pin);
+ 6d4:	88 b3       	in	r24, 0x18	; 24
+ 6d6:	28 23       	and	r18, r24
+ 6d8:	28 bb       	out	0x18, r18	; 24
+}
+ 6da:	08 95       	ret
+
+000006dc <output_pulled_up>:
+
+//if pin is low, toggle ddr first to transition through hi-z, port first to transition through high
+void output_pulled_up(uint8_t pin){		//output pulled up 
+	DDR &= ~_BV(pin);
+ 6dc:	97 b3       	in	r25, 0x17	; 23
+ 6de:	21 e0       	ldi	r18, 0x01	; 1
+ 6e0:	30 e0       	ldi	r19, 0x00	; 0
+ 6e2:	02 c0       	rjmp	.+4      	; 0x6e8 <output_pulled_up+0xc>
+ 6e4:	22 0f       	add	r18, r18
+ 6e6:	33 1f       	adc	r19, r19
+ 6e8:	8a 95       	dec	r24
+ 6ea:	e2 f7       	brpl	.-8      	; 0x6e4 <output_pulled_up+0x8>
+ 6ec:	82 2f       	mov	r24, r18
+ 6ee:	80 95       	com	r24
+ 6f0:	89 23       	and	r24, r25
+ 6f2:	87 bb       	out	0x17, r24	; 23
+	PORT |= _BV(pin);
+ 6f4:	88 b3       	in	r24, 0x18	; 24
+ 6f6:	28 2b       	or	r18, r24
+ 6f8:	28 bb       	out	0x18, r18	; 24
+}
+ 6fa:	08 95       	ret
+
+000006fc <input>:
+
+
+bool input(uint8_t pin){			//get pin input
+ 6fc:	38 2f       	mov	r19, r24
+	bool temp;
+	DDR &= ~ _BV(pin);				//set direction to input
+ 6fe:	27 b3       	in	r18, 0x17	; 23
+ 700:	81 e0       	ldi	r24, 0x01	; 1
+ 702:	90 e0       	ldi	r25, 0x00	; 0
+ 704:	03 2e       	mov	r0, r19
+ 706:	02 c0       	rjmp	.+4      	; 0x70c <input+0x10>
+ 708:	88 0f       	add	r24, r24
+ 70a:	99 1f       	adc	r25, r25
+ 70c:	0a 94       	dec	r0
+ 70e:	e2 f7       	brpl	.-8      	; 0x708 <input+0xc>
+ 710:	80 95       	com	r24
+ 712:	82 23       	and	r24, r18
+ 714:	87 bb       	out	0x17, r24	; 23
+	temp = (PIN & _BV(pin));
+ 716:	86 b3       	in	r24, 0x16	; 22
+ 718:	90 e0       	ldi	r25, 0x00	; 0
+ 71a:	02 c0       	rjmp	.+4      	; 0x720 <input+0x24>
+ 71c:	95 95       	asr	r25
+ 71e:	87 95       	ror	r24
+ 720:	3a 95       	dec	r19
+ 722:	e2 f7       	brpl	.-8      	; 0x71c <input+0x20>
+	return temp;
+}
+ 724:	81 70       	andi	r24, 0x01	; 1
+ 726:	08 95       	ret
+
+00000728 <calcParity>:
+
+
+// calculate parity of an 8 bit argument (1=odd, 0=even)
+bool calcParity(uint8_t arg)
+{
+ return parity_even_bit(arg); // defined in util/parity.h 
+ 728:	08 2e       	mov	r0, r24
+ 72a:	82 95       	swap	r24
+ 72c:	80 25       	eor	r24, r0
+ 72e:	08 2e       	mov	r0, r24
+ 730:	86 95       	lsr	r24
+ 732:	86 95       	lsr	r24
+ 734:	80 25       	eor	r24, r0
+ 736:	90 e0       	ldi	r25, 0x00	; 0
+ 738:	01 96       	adiw	r24, 0x01	; 1
+ 73a:	96 95       	lsr	r25
+ 73c:	87 95       	ror	r24
+}
+ 73e:	81 70       	andi	r24, 0x01	; 1
+ 740:	08 95       	ret
+
+00000742 <delay_ms>:
+#endif
+
+
+// millisecond delay routine
+void delay_ms(uint16_t arg)
+{
+ 742:	0a c0       	rjmp	.+20     	; 0x758 <delay_ms+0x16>
+ while(arg-- > 0)
+ 744:	26 ee       	ldi	r18, 0xE6	; 230
+ 746:	33 e0       	ldi	r19, 0x03	; 3
+	...
+ {
+  __asm__ volatile ("NOP");
+  __asm__ volatile ("NOP");
+  __asm__ volatile ("NOP");
+  __asm__ volatile ("NOP");
+ } while(--arg); // 2 clocks for this loop overhead
+ 750:	21 50       	subi	r18, 0x01	; 1
+ 752:	30 40       	sbci	r19, 0x00	; 0
+ 754:	c9 f7       	brne	.-14     	; 0x748 <delay_ms+0x6>
+ 756:	01 97       	sbiw	r24, 0x01	; 1
+
+
+// millisecond delay routine
+void delay_ms(uint16_t arg)
+{
+ while(arg-- > 0)
+ 758:	00 97       	sbiw	r24, 0x00	; 0
+ 75a:	a1 f7       	brne	.-24     	; 0x744 <delay_ms+0x2>
+ {
+  delay_us(998); // assumes 2us loop overhead
+ }
+}
+ 75c:	08 95       	ret
+
+0000075e <delay_us>:
+	...
+ {
+  __asm__ volatile ("NOP");
+  __asm__ volatile ("NOP");
+  __asm__ volatile ("NOP");
+  __asm__ volatile ("NOP");
+ } while(--arg); // 2 clocks for this loop overhead
+ 766:	01 97       	sbiw	r24, 0x01	; 1
+ 768:	d1 f7       	brne	.-12     	; 0x75e <delay_us>
+}
+ 76a:	08 95       	ret
+
+0000076c <processPCtoKeyboard>:
+
+
+// This function handles comms from the pc to keyboard, or handles
+// the protocol locally if no keyboard is present.
+void processPCtoKeyboard(void)
+{
+ 76c:	1f 93       	push	r17
+
+ do // loop in host_rts (request to send) state
+ {
+  exitdo = true;
+
+  switch (getBusState())
+ 76e:	83 dd       	rcall	.-1274   	; 0x276 <getBusState>
+ 770:	82 30       	cpi	r24, 0x02	; 2
+ 772:	91 f0       	breq	.+36     	; 0x798 <processPCtoKeyboard+0x2c>
+ 774:	83 30       	cpi	r24, 0x03	; 3
+ 776:	d1 f0       	breq	.+52     	; 0x7ac <processPCtoKeyboard+0x40>
+ 778:	81 30       	cpi	r24, 0x01	; 1
+ 77a:	01 f5       	brne	.+64     	; 0x7bc <processPCtoKeyboard+0x50>
+  {
+   case HOST_RTS: // host request to send
+            if(--hrtsCount) // ensure rts for some time by count down
+ 77c:	80 91 6b 00 	lds	r24, 0x006B
+ 780:	81 50       	subi	r24, 0x01	; 1
+ 782:	80 93 6b 00 	sts	0x006B, r24
+ 786:	88 23       	and	r24, r24
+ 788:	91 f7       	brne	.-28     	; 0x76e <processPCtoKeyboard+0x2>
+            {   
+             exitdo=false;
+            }
+            else // count down complete, process rts
+            {
+             scanCode=receiveScanCode(); // get the scan code
+ 78a:	2b de       	rcall	.-938    	; 0x3e2 <receiveScanCode>
+ 78c:	18 2f       	mov	r17, r24
+
+//             if (passthrough) // if keyboard is attached
+//             {
+              inhibitBus(true); // bus is released after sendATCommand
+ 78e:	81 e0       	ldi	r24, 0x01	; 1
+ 790:	6f de       	rcall	.-802    	; 0x470 <inhibitBus>
+              if(scanCode == 0xFF) // reset passthrough upon software reset req from pc
+              {
+               passthrough = false; // if keyboard responds, passthrough will enable
+              }
+#endif
+              sendATCommand(scanCode); // relay PC message to attached keyboard
+ 792:	81 2f       	mov	r24, r17
+ 794:	1d df       	rcall	.-454    	; 0x5d0 <sendATCommand>
+ 796:	12 c0       	rjmp	.+36     	; 0x7bc <processPCtoKeyboard+0x50>
+#endif
+
+            } // end if
+            break;
+   case INHIBIT:
+            if (!inh)
+ 798:	80 91 6c 00 	lds	r24, 0x006C
+ 79c:	88 23       	and	r24, r24
+ 79e:	71 f4       	brne	.+28     	; 0x7bc <processPCtoKeyboard+0x50>
+            {
+             inhibitBus(true);
+ 7a0:	81 e0       	ldi	r24, 0x01	; 1
+ 7a2:	66 de       	rcall	.-820    	; 0x470 <inhibitBus>
+             inh=true;
+ 7a4:	81 e0       	ldi	r24, 0x01	; 1
+ 7a6:	80 93 6c 00 	sts	0x006C, r24
+ 7aa:	08 c0       	rjmp	.+16     	; 0x7bc <processPCtoKeyboard+0x50>
+            }
+            break;
+   case IDLE:
+            if (inh)
+ 7ac:	80 91 6c 00 	lds	r24, 0x006C
+ 7b0:	88 23       	and	r24, r24
+ 7b2:	21 f0       	breq	.+8      	; 0x7bc <processPCtoKeyboard+0x50>
+            {
+             inhibitBus(false);
+ 7b4:	80 e0       	ldi	r24, 0x00	; 0
+ 7b6:	5c de       	rcall	.-840    	; 0x470 <inhibitBus>
+             inh=false;
+ 7b8:	10 92 6c 00 	sts	0x006C, r1
+
+  } // end switch
+
+ } while (!(exitdo)); // loop for some time while bus is rts state
+
+}
+ 7bc:	1f 91       	pop	r17
+ 7be:	08 95       	ret
+
+000007c0 <_exit>:
+ 7c0:	f8 94       	cli
+
+000007c2 <__stop_program>:
+ 7c2:	ff cf       	rjmp	.-2      	; 0x7c2 <__stop_program>
